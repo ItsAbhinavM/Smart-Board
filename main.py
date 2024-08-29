@@ -4,14 +4,54 @@ from cvzone.HandTrackingModule import HandDetector
 detector = HandDetector(maxHands=1, detectionCon=0.8)
 video = cv2.VideoCapture(0)
 
+def drawLines(img,lmlist):
+    if len(lmlist) >= 21:
+        # Thumb
+        cv2.line(img, (lmlist[0][0], lmlist[0][1]), (lmlist[1][0], lmlist[1][1]), (0, 255, 0), 2)  # Thumb segment 1
+        cv2.line(img, (lmlist[1][0], lmlist[1][1]), (lmlist[2][0], lmlist[2][1]), (0, 255, 0), 2)  # Thumb segment 2
+        cv2.line(img, (lmlist[2][0], lmlist[2][1]), (lmlist[3][0], lmlist[3][1]), (0, 255, 0), 2)  # Thumb segment 3
+        cv2.line(img, (lmlist[3][0], lmlist[3][1]), (lmlist[4][0], lmlist[4][1]), (0, 255, 0), 2)  # Thumb segment 4
+            
+        # Index finger
+        cv2.line(img, (lmlist[5][0], lmlist[5][1]), (lmlist[6][0], lmlist[6][1]), (0, 255, 0), 2)  # Index finger segment 1
+        cv2.line(img, (lmlist[6][0], lmlist[6][1]), (lmlist[7][0], lmlist[7][1]), (0, 255, 0), 2)  # Index finger segment 2
+        cv2.line(img, (lmlist[7][0], lmlist[7][1]), (lmlist[8][0], lmlist[8][1]), (0, 255, 0), 2)  # Index finger segment 3
+            
+        # Middle finger
+        cv2.line(img, (lmlist[9][0], lmlist[9][1]), (lmlist[10][0], lmlist[10][1]), (0, 255, 0), 2)    # Middle finger segment 1
+        cv2.line(img, (lmlist[10][0], lmlist[10][1]), (lmlist[11][0], lmlist[11][1]), (0, 255, 0), 2)  # Middle finger segment 2
+        cv2.line(img, (lmlist[11][0], lmlist[11][1]), (lmlist[12][0], lmlist[12][1]), (0, 255, 0), 2)  # Middle finger segment 3
+            
+        # Ring finger
+        cv2.line(img, (lmlist[13][0], lmlist[13][1]), (lmlist[14][0], lmlist[14][1]), (0, 255, 0), 2)  # Ring finger segment 1
+        cv2.line(img, (lmlist[14][0], lmlist[14][1]), (lmlist[15][0], lmlist[15][1]), (0, 255, 0), 2)  # Ring finger segment 2
+        cv2.line(img, (lmlist[15][0], lmlist[15][1]), (lmlist[16][0], lmlist[16][1]), (0, 255, 0), 2)  # Ring finger segment 3
+            
+        # Pinky finger
+        cv2.line(img, (lmlist[17][0], lmlist[17][1]), (lmlist[18][0], lmlist[18][1]), (0, 255, 0), 2)  # Pinky finger segment 1
+        cv2.line(img, (lmlist[18][0], lmlist[18][1]), (lmlist[19][0], lmlist[19][1]), (0, 255, 0), 2)  # Pinky finger segment 2
+        cv2.line(img, (lmlist[19][0], lmlist[19][1]), (lmlist[20][0], lmlist[20][1]), (0, 255, 0), 2)  # Pinky finger segment 3
+        cv2.line(img, (lmlist[0][0], lmlist[0][1]), (lmlist[17][0], lmlist[17][1]), (0, 255, 0), 2)    # Pinky finger segment 4
+            
+        # Palm connections
+        cv2.line(img, (lmlist[5][0], lmlist[5][1]), (lmlist[9][0], lmlist[9][1]), (0, 255, 0), 2)      # Index to middle base
+        cv2.line(img, (lmlist[9][0], lmlist[9][1]), (lmlist[13][0], lmlist[13][1]), (0, 255, 0), 2)    # Middle to ring base
+        cv2.line(img, (lmlist[13][0], lmlist[13][1]), (lmlist[17][0], lmlist[17][1]), (0, 255, 0), 2)  # Ring to pinky base
+
+
+    for lm in lmlist:
+        cv2.circle(img, (lm[0], lm[1]), 5, (255, 0, 0), cv2.FILLED)
+
 while True:
     _, img = video.read()
     img = cv2.flip(img, 1)
-    hands, img = detector.findHands(img, draw=False)
-
+    hands, img = detector.findHands(img, draw=False)  
     if hands:
-        hand = hands[0]
-        lmlist = hand['lmList']
+        hand = hands[0] 
+        lmlist = hand['lmList'] 
+
+        drawLines(img,lmlist)
+
         if lmlist:
             fingerUp = detector.fingersUp(hand)
             if fingerUp == [0, 1, 0, 0, 0]:
@@ -23,8 +63,7 @@ while True:
             elif fingerUp == [0, 1, 1, 1, 1]:
                 print("4 fingers up")
             elif fingerUp == [1, 1, 1, 1, 1]:
-                print("All fingers are up")
-
+                print("All fingers are up") 
     cv2.imshow("Video", img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -32,4 +71,3 @@ while True:
 
 video.release()
 cv2.destroyAllWindows()
-print("hello world")
