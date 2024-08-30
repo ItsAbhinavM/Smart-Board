@@ -50,9 +50,9 @@ def fingerDetectorLines(img,lmlist):
 def drawLines(img, lmlist):
     global last_point, drawing
     if len(lmlist) >= 21:
+        indexTip = (lmlist[8][0], lmlist[8][1])
         if detector.fingersUp(hand) == [0, 1, 0, 0, 0]:  
-            indexTip = (lmlist[8][0], lmlist[8][1])
-
+            
             if drawing:
                 if last_point:
                     cv2.line(canvas, last_point, indexTip, (0, 0, 255), 5)
@@ -60,6 +60,10 @@ def drawLines(img, lmlist):
             else:
                 drawing = True
                 last_point = indexTip
+        elif detector.fingersUp(hand)==[0,0,0,0,0]:
+            cv2.circle(canvas,indexTip,50,(0,0,0),-1)
+            # last_point=None
+            drawing=False
         else:
             drawing = False
             last_point = None
@@ -90,6 +94,8 @@ while True:
                 print("4 fingers up")
             elif fingerUp == [1, 1, 1, 1, 1]:
                 print("All fingers are up") 
+            elif fingerUp == [0,0,0,0,0]:
+                print("Fingers are wrapped") 
     cv2.imshow("Video", img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
