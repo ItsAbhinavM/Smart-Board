@@ -1,10 +1,15 @@
 import cv2
+import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 
 detector = HandDetector(maxHands=1, detectionCon=0.8)
 video = cv2.VideoCapture(0)
 
-def drawLines(img,lmlist):
+drawing=False
+last_point=None
+canvas=np.zeros((480,640,3),dtype=np.uint8)
+
+def fingerDetectorLines(img,lmlist):
     if len(lmlist) >= 21:
         # Thumb
         cv2.line(img, (lmlist[0][0], lmlist[0][1]), (lmlist[1][0], lmlist[1][1]), (0, 255, 0), 2)  # Thumb segment 1
@@ -42,6 +47,26 @@ def drawLines(img,lmlist):
     for lm in lmlist:
         cv2.circle(img, (lm[0], lm[1]), 5, (255, 0, 0), cv2.FILLED)
 
+def drawLines(img, lmlist):
+    global last_point, drawing
+    if len(lmlist) >= 21:
+        if detector.fingersUp(hand) == [0, 1, 0, 0, 0]:  
+            indexTip = (lmlist[8][0], lmlist[8][1])
+
+            if drawing:
+                if last_point:
+                    cv2.line(canvas, last_point, indexTip, (0, 0, 255), 5)
+                last_point = indexTip
+            else:
+                drawing = True
+                last_point = indexTip
+        else:
+            drawing = False
+            last_point = None
+    
+    img = cv2.addWeighted(img, 1, canvas, 0.5, 0)
+    return img
+
 while True:
     _, img = video.read()
     img = cv2.flip(img, 1)
@@ -50,7 +75,8 @@ while True:
         hand = hands[0] 
         lmlist = hand['lmList'] 
 
-        drawLines(img,lmlist)
+        fingerDetectorLines(img,lmlist)
+        img=drawLines(img,lmlist)
 
         if lmlist:
             fingerUp = detector.fingersUp(hand)
