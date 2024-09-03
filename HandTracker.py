@@ -8,6 +8,14 @@ class HandTracker:
         self.canvas = np.zeros((480, 640, 3), dtype=np.uint8)
         self.drawing = False
         self.last_point = None
+        self.current_color = (0, 0, 255)  
+        
+        self.color_buttons = [
+            {"color": (0, 0, 255), "pos": (50, 10, 50, 50)},
+            {"color": (0, 255, 0), "pos": (110, 10, 50, 50)},
+            {"color": (255, 0, 0), "pos": (170, 10, 50, 50)},  
+            {"color": (0, 255, 255), "pos": (230, 10, 50, 50)},
+        ]
 
     def fingerDetectorLines(self, img, lmlist):
         if len(lmlist) >= 21:
@@ -46,13 +54,24 @@ class HandTracker:
         for lm in lmlist:
             cv2.circle(img, (lm[0], lm[1]), 5, (255, 0, 0), cv2.FILLED)
 
+    def drawColorButtons(self, img):
+        for button in self.color_buttons:
+            x, y, w, h = button["pos"]
+            cv2.rectangle(img, (x, y), (x + w, y + h), button["color"], cv2.FILLED)
+
+    def checkColorChange(self, x, y):
+        for button in self.color_buttons:
+            bx, by, bw, bh = button["pos"]
+            if bx < x < bx + bw and by < y < by + bh:
+                self.current_color = button["color"]
+
     def drawLines(self, img, lmlist, hand):
         if len(lmlist) >= 21:
             indexTip = (lmlist[8][0], lmlist[8][1])
             if self.detector.fingersUp(hand) == [0, 1, 0, 0, 0]:
                 if self.drawing:
                     if self.last_point:
-                        cv2.line(self.canvas, self.last_point, indexTip, (0, 0, 255), 5)
+                        cv2.line(self.canvas, self.last_point, indexTip, self.current_color, 5)
                     self.last_point = indexTip
                 else:
                     self.drawing = True

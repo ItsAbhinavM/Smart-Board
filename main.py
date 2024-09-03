@@ -9,6 +9,8 @@ while True:
     img = cv2.flip(img, 1)
     hands, img = tracker.findHands(img)
     
+    tracker.drawColorButtons(img)
+
     if hands:
         hand = hands[0]
         lmlist = hand['lmList']
@@ -17,6 +19,8 @@ while True:
 
         fingerUp = tracker.detector.fingersUp(hand)
         if fingerUp == [0, 1, 0, 0, 0]:
+            indexTip = lmlist[8][0], lmlist[8][1]
+            tracker.checkColorChange(indexTip[0], indexTip[1])
             print("1 finger up")
         elif fingerUp == [0, 1, 1, 0, 0]:
             print("2 fingers up")
