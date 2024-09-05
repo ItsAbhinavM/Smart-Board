@@ -12,10 +12,10 @@ class HandTracker:
         self.current_thickness=5
 
         self.color_buttons = [
-            {"color": (0, 0, 255), "pos": (90, 0, 90,75)},
-            {"color": (0, 255, 0), "pos": (180, 0, 90,75)},
-            {"color": (255, 0, 0), "pos": (270, 0, 90,75)},  
-            {"color": (0, 255, 255), "pos": (360, 0, 90,75)},
+            {"color": (0, 0, 255), "pos": (90, 0, 85,75)},
+            {"color": (0, 255, 0), "pos": (180, 0, 85,75)},
+            {"color": (255, 0, 0), "pos": (270, 0, 85,75)},  
+            {"color": (0, 255, 255), "pos": (350, 0, 85,75)},
         ]
 
         self.thickness_boxes = [
@@ -65,6 +65,9 @@ class HandTracker:
     def drawColorButtons(self, img):
         for button in self.color_buttons:
             x, y, w, h = button["pos"]
+            color=button['color']
+            if color==self.current_color:
+                cv2.rectangle(img,(x-5, y-5), (x + w+5, y + h+5),(255,255,255),cv2.FILLED)
             cv2.rectangle(img, (x, y), (x + w, y + h), button["color"], cv2.FILLED)
         cv2.rectangle(img, (450, 0), (450 + 90, 0 + 75), (255,255,255))
         cv2.putText(img, 'Colors',(455, 45),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
