@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
+from datetime import datetime
 
 class HandTracker:
     def __init__(self, maxHands=1, detectionCon=0.8):
@@ -10,7 +11,7 @@ class HandTracker:
         self.last_point = None
         self.current_color = (0, 0, 255)  
         self.current_thickness=5
-        self.save_counter=0
+        self.thumbs_up_saved = False
 
         self.color_buttons = [
             {"color": (0, 0, 255), "pos": (90, 0, 85,75)},
@@ -123,11 +124,12 @@ class HandTracker:
         return img
     
     def saveCanvas(self):
-        file_name=f"Saved_Boards/canvas_{self.save_counter}.png"
-        cv2.imwrite(file_name,self.canvas)
+        now=datetime.now()
+        formattedTime = now.strftime("%d-%m-%Y_%H-%M")
+        file_name = f"Saved_Boards/canvas_{formattedTime}.png"
+        cv2.imwrite(file_name, self.canvas)
         print("image saved")
-        self.save_counter+=1
-
+        
     def findHands(self, img):
         hands, img = self.detector.findHands(img, draw=False)
         return hands, img
