@@ -8,8 +8,10 @@ A Virtual Painter application made using OpenCV and cvzone. The application allo
 - **Drawing** : Draw on a canvas with custom colors and thickness.
 - **Color Selection** : Change the drawing color using hand gestures.
 - **Save Canvas** : Saves the progress in the canvas in a `.png` file.
-![webcamImage](Assets/webcam.jpg)
-![canvasImage](Assets/canvas.jpg)
+<div style="display: flex; justify-content: space-between;">
+  <img src="Assets/webcam.jpg" alt="Webcam Image" width="45%" />
+  <img src="Assets/canvas.jpg" alt="Canvas Image" width="45%" />
+</div>
 
 ## Installation
 
