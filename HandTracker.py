@@ -79,7 +79,9 @@ class HandTracker:
             if thickness=='pen':
                 cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,255))
                 cv2.putText(img,str(thickness),(x+10,y+37),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255),2)
-            else :    
+            else :
+                if thickness * 5 == self.current_thickness:
+                    cv2.rectangle(img, (x - 5, y - 5), (x + w + 5, y + h + 5), (255, 255, 255), 2)
                 cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,0),cv2.FILLED)
                 cv2.putText(img,str(thickness),(x+25,y+37),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255),2)
 
