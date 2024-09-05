@@ -11,10 +11,10 @@ class HandTracker:
         self.current_color = (0, 0, 255)  
         
         self.color_buttons = [
-            {"color": (0, 0, 255), "pos": (50, 10, 50, 50)},
-            {"color": (0, 255, 0), "pos": (110, 10, 50, 50)},
-            {"color": (255, 0, 0), "pos": (170, 10, 50, 50)},  
-            {"color": (0, 255, 255), "pos": (230, 10, 50, 50)},
+            {"color": (0, 0, 255), "pos": (90, 0, 90,75)},
+            {"color": (0, 255, 0), "pos": (180, 0, 90,75)},
+            {"color": (255, 0, 0), "pos": (270, 0, 90,75)},  
+            {"color": (0, 255, 255), "pos": (360, 0, 90,75)},
         ]
 
     def fingerDetectorLines(self, img, lmlist):
@@ -58,6 +58,8 @@ class HandTracker:
         for button in self.color_buttons:
             x, y, w, h = button["pos"]
             cv2.rectangle(img, (x, y), (x + w, y + h), button["color"], cv2.FILLED)
+        cv2.rectangle(img, (450, 0), (450 + 90, 0 + 75), (255,255,255))
+        cv2.putText(img, 'Colors',(455, 45),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
 
     def checkColorChange(self, x, y):
         for button in self.color_buttons:
