@@ -22,6 +22,7 @@ while True:
         if fingerUp == [0, 1, 1, 0, 0]:
             indexTip = lmlist[8][0], lmlist[8][1]
             tracker.checkColorChange(indexTip[0], indexTip[1])
+            tracker.checkThichknessChange(indexTip[0],indexTip[1])
             print("1 finger up")
         elif fingerUp == [0, 1, 1, 0, 0]:
             print("2 fingers up")

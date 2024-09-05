@@ -9,8 +9,8 @@ class HandTracker:
         self.drawing = False
         self.last_point = None
         self.current_color = (0, 0, 255)  
-        self.current_thickness=3
-        
+        self.current_thickness=5
+
         self.color_buttons = [
             {"color": (0, 0, 255), "pos": (90, 0, 90,75)},
             {"color": (0, 255, 0), "pos": (180, 0, 90,75)},
@@ -19,12 +19,11 @@ class HandTracker:
         ]
 
         self.thickness_boxes = [
-    {"pos": (570, 100, 65, 65), "text": 'pen'},
-    {"pos": (570, 170, 65, 65), "text": 1},  
-    {"pos": (570, 240, 65, 65), "text": 2},
-    {"pos": (570, 310, 65, 65), "text": 3}
-]
-
+            {"pos": (570, 100, 65, 65), "text": 'pen'},
+            {"pos": (570, 170, 65, 65), "text": 1},  
+            {"pos": (570, 240, 65, 65), "text": 2},
+            {"pos": (570, 310, 65, 65), "text": 3}
+        ]
 
     def fingerDetectorLines(self, img, lmlist):
         if len(lmlist) >= 21:
@@ -91,8 +90,9 @@ class HandTracker:
         for button in self.thickness_boxes:
             bx, by, bw, bh = button["pos"]
             if bx < x < bx + bw and by < y < by + bh:
-                self.current_thickness=button["text"]
-        print("thickness changed")
+                if isinstance(button['text'],int):
+                    self.current_thickness=button['text']*5
+                    print(f"thickness changed to {self.current_thickness}")
 
     def drawLines(self, img, lmlist, hand):
         if len(lmlist) >= 21:
@@ -100,7 +100,8 @@ class HandTracker:
             if self.detector.fingersUp(hand) == [0, 1, 0, 0, 0]:
                 if self.drawing:
                     if self.last_point:
-                        cv2.line(self.canvas, self.last_point, indexTip, self.current_color, 5)
+                        global current_thickness
+                        cv2.line(self.canvas, self.last_point, indexTip, self.current_color, self.current_thickness)
                     self.last_point = indexTip
                 else:
                     self.drawing = True
