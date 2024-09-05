@@ -10,6 +10,7 @@ while True:
     hands, img = tracker.findHands(img)
     
     tracker.drawColorButtons(img)
+    tracker.drawThicknessButtons(img)
 
     if hands:
         hand = hands[0]

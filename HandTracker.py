@@ -17,6 +17,13 @@ class HandTracker:
             {"color": (0, 255, 255), "pos": (360, 0, 90,75)},
         ]
 
+        self.thickness_boxes = [
+    {"pos": (570, 100, 65, 65), "text": 1},
+    {"pos": (570, 170, 65, 65), "text": 2},  
+    {"pos": (570, 240, 65, 65), "text": 3}  
+]
+
+
     def fingerDetectorLines(self, img, lmlist):
         if len(lmlist) >= 21:
             # Thumb
@@ -60,6 +67,13 @@ class HandTracker:
             cv2.rectangle(img, (x, y), (x + w, y + h), button["color"], cv2.FILLED)
         cv2.rectangle(img, (450, 0), (450 + 90, 0 + 75), (255,255,255))
         cv2.putText(img, 'Colors',(455, 45),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+
+    def drawThicknessButtons(self,img):
+        for button in self.thickness_boxes:
+            x, y, w, h = button["pos"]
+            thickness=button['text']
+            cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,0),cv2.FILLED)
+            cv2.putText(img,str(thickness),(x+25,y+37),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255),2)
 
     def checkColorChange(self, x, y):
         for button in self.color_buttons:
