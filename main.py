@@ -24,6 +24,8 @@ while True:
             tracker.checkColorChange(indexTip[0], indexTip[1])
             tracker.checkThichknessChange(indexTip[0],indexTip[1])
             print("1 finger up")
+        elif fingerUp==[1, 0,0, 0, 0]:
+            tracker.saveCanvas()
         elif fingerUp == [0, 1, 1, 0, 0]:
             print("2 fingers up")
         elif fingerUp == [0, 1, 1, 1, 0]:

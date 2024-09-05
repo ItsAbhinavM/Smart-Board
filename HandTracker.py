@@ -10,6 +10,7 @@ class HandTracker:
         self.last_point = None
         self.current_color = (0, 0, 255)  
         self.current_thickness=5
+        self.save_counter=0
 
         self.color_buttons = [
             {"color": (0, 0, 255), "pos": (90, 0, 85,75)},
@@ -120,6 +121,12 @@ class HandTracker:
         
         img = cv2.addWeighted(img, 1, self.canvas, 0.5, 0)
         return img
+    
+    def saveCanvas(self):
+        file_name=f"Saved_Boards/canvas_{self.save_counter}.png"
+        cv2.imwrite(file_name,self.canvas)
+        print("image saved")
+        self.save_counter+=1
 
     def findHands(self, img):
         hands, img = self.detector.findHands(img, draw=False)
